@@ -19,6 +19,22 @@
     "lodash": ">=2.4.x",
     "merge-defaults": ">=0.1.0"
   },
+  "optionalDependencies": {
+  	"grunt": "0.4.1",
+  	"grunt-cli": "0.1.9",
+    "sails-generate-gruntfile": "0.10.1",
+    "grunt-contrib-copy": "0.4.1",
+    "grunt-contrib-clean": "0.4.1",
+    "grunt-contrib-concat": "0.3.0",
+    "grunt-sails-linker": "0.9.5",
+    "grunt-contrib-jst": "0.5.0",
+    "grunt-contrib-watch": "0.4.4",
+    "grunt-contrib-uglify": "0.2.2",
+    "grunt-contrib-cssmin": "0.6.1",
+    "grunt-contrib-less": "~0.8.3",
+    "grunt-contrib-coffee": "0.7.0",
+    "sails-generate": "0.0.10"
+  },
   "devDependencies": {
     "sails-generate": "*",
     "reportback": "*",
