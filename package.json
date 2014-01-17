@@ -33,7 +33,6 @@
     "grunt-contrib-cssmin": "0.6.1",
     "grunt-contrib-less": "~0.8.3",
     "grunt-contrib-coffee": "0.7.0",
-    "sails-generate": "0.0.10"
   },
   "devDependencies": {
     "sails-generate": "*",
