@@ -123,7 +123,7 @@ module.exports = function(grunt) {
 
   // Get path to core grunt dependencies from Sails
   var path = require('path');
-  var depsPath = grunt.option('gdsrc') || 'node_modules/sails/node_modules';
+  var depsPath = 'node_modules';
   grunt.loadTasks(path.join(depsPath, '/grunt-contrib-clean/tasks'));
   grunt.loadTasks(path.join(depsPath, '/grunt-contrib-copy/tasks'));
   grunt.loadTasks(path.join(depsPath, '/grunt-contrib-concat/tasks'));
