@@ -283,12 +283,42 @@ module.exports = function(grunt) {
         }
       },
 
+      devJsRelative: {
+        options: {
+          startTag: '<!--SCRIPTS-->',
+          endTag: '<!--SCRIPTS END-->',
+          fileTmpl: '<script src="%s"></script>',
+          appRoot: '.tmp/public',
+          relative: true
+        },
+        files: {
+          '.tmp/public/**/*.html': jsFilesToInject,
+          'views/**/*.html': jsFilesToInject,
+          'views/**/*.ejs': jsFilesToInject
+        }
+      },
+
       prodJs: {
         options: {
           startTag: '<!--SCRIPTS-->',
           endTag: '<!--SCRIPTS END-->',
           fileTmpl: '<script src="%s"></script>',
           appRoot: '.tmp/public'
+        },
+        files: {
+          '.tmp/public/**/*.html': ['.tmp/public/min/production.js'],
+          'views/**/*.html': ['.tmp/public/min/production.js'],
+          'views/**/*.ejs': ['.tmp/public/min/production.js']
+        }
+      },
+
+      prodJsRelative: {
+        options: {
+          startTag: '<!--SCRIPTS-->',
+          endTag: '<!--SCRIPTS END-->',
+          fileTmpl: '<script src="%s"></script>',
+          appRoot: '.tmp/public',
+          relative: true
         },
         files: {
           '.tmp/public/**/*.html': ['.tmp/public/min/production.js'],
@@ -313,12 +343,44 @@ module.exports = function(grunt) {
         }
       },
 
+      devStylesRelative: {
+        options: {
+          startTag: '<!--STYLES-->',
+          endTag: '<!--STYLES END-->',
+          fileTmpl: '<link rel="stylesheet" href="%s">',
+          appRoot: '.tmp/public',
+          relative: true
+        },
+
+        // cssFilesToInject defined up top
+        files: {
+          '.tmp/public/**/*.html': cssFilesToInject,
+          'views/**/*.html': cssFilesToInject,
+          'views/**/*.ejs': cssFilesToInject
+        }
+      },
+
       prodStyles: {
         options: {
           startTag: '<!--STYLES-->',
           endTag: '<!--STYLES END-->',
           fileTmpl: '<link rel="stylesheet" href="%s">',
           appRoot: '.tmp/public'
+        },
+        files: {
+          '.tmp/public/index.html': ['.tmp/public/min/production.css'],
+          'views/**/*.html': ['.tmp/public/min/production.css'],
+          'views/**/*.ejs': ['.tmp/public/min/production.css']
+        }
+      },
+
+      prodStylesRelative: {
+        options: {
+          startTag: '<!--STYLES-->',
+          endTag: '<!--STYLES END-->',
+          fileTmpl: '<link rel="stylesheet" href="%s">',
+          appRoot: '.tmp/public',
+          relative: true
         },
         files: {
           '.tmp/public/index.html': ['.tmp/public/min/production.css'],
@@ -390,12 +452,37 @@ module.exports = function(grunt) {
     'sails-linker:devTpl'
   ]);
 
+  // Link assets for built assets
+  grunt.registerTask('linkAssetsBuild', [
+    'sails-linker:devJsRelative',
+    'sails-linker:devStylesRelative',
+    'sails-linker:devTpl'
+  ]);
+
+  // Link assets for production built assets
+  grunt.registerTask('linkAssetsBuildProd', [
+    'sails-linker:prodJsRelative',
+    'sails-linker:prodStylesRelative',
+    'sails-linker:devTpl'
+  ]);
+
 
   // Build the assets into a web accessible folder.
   // (handy for phone gap apps, chrome extensions, etc.)
   grunt.registerTask('build', [
     'compileAssets',
-    'linkAssets',
+    'linkAssetsBuild',
+    'clean:build',
+    'copy:build'
+  ]);
+
+  // Build the assests into web accessible folder, except minifies all files.
+  grunt.registerTask('buildProd', [
+    'compileAssets',
+    'concat',
+    'uglify',
+    'cssmin',
+    'linkAssetsBuildProd',
     'clean:build',
     'copy:build'
   ]);
