@@ -1,9 +1,10 @@
 /**
  * Gruntfile
  *
- * If you created your Sails app with `sails new foo --linker`,
- * the following files will be automatically injected (in order)
- * into the EJS and HTML files in your `views` and `assets` folders.
+ * By default, the Gruntfile in new Sails projects comes with a `linker`
+ * task, which will automatically inject client-side scripts, styles, and templates
+ * from your `assets` folder into specific regions of certain EJS and HTML files
+ * specified below.  This behavior is completely optional, but here for convenience.
  *
  * At the top part of this file, you'll find a few of the most commonly
  * configured options, but Sails' integration with Grunt is also fully
@@ -29,7 +30,7 @@ module.exports = function(grunt) {
    */
 
   var cssFilesToInject = [
-    'linker/**/*.css'
+    'styles/**/*.css'
   ];
 
 
@@ -47,19 +48,19 @@ module.exports = function(grunt) {
     // linked in the proper order order
 
     // Bring in the socket.io client
-    'linker/js/socket.io.js',
+    'js/socket.io.js',
 
     // then beef it up with some convenience logic for talking to Sails.js
-    'linker/js/sails.io.js',
+    'js/sails.io.js',
 
     // A simpler boilerplate library for getting you up and running w/ an
     // automatic listener for incoming messages from Socket.io.
-    'linker/js/app.js',
+    'js/app.js',
 
     // *->    put other dependencies here   <-*
 
     // All of the rest of your app scripts imported here
-    'linker/**/*.js'
+    'js/**/*.js'
   ];
 
 
@@ -74,7 +75,7 @@ module.exports = function(grunt) {
    */
 
   var templateFilesToInject = [
-    'linker/**/*.html'
+    'templates/**/*.html'
   ];
 
 
@@ -201,9 +202,9 @@ module.exports = function(grunt) {
           ext: '.css'
         }, {
           expand: true,
-          cwd: 'assets/linker/styles/',
+          cwd: 'assets/styles/',
           src: ['*.less'],
-          dest: '.tmp/public/linker/styles/',
+          dest: '.tmp/public/styles/',
           ext: '.css'
         }]
       }
@@ -224,9 +225,9 @@ module.exports = function(grunt) {
           ext: '.js'
         }, {
           expand: true,
-          cwd: 'assets/linker/js/',
+          cwd: 'assets/js/',
           src: ['**/*.coffee'],
-          dest: '.tmp/public/linker/js/',
+          dest: '.tmp/public/js/',
           ext: '.js'
         }]
       }
