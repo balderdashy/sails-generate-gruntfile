@@ -1,9 +1,6 @@
 var includeAll = require('include-all')
 	, path = require('path');
 
-
-
-
 /**
  * Gruntfile
  *
@@ -23,32 +20,45 @@ var includeAll = require('include-all')
 
 module.exports = function(grunt) {
 
-	// Load Grunt task deps from the `tasks` directory
-	var tasks = loadTasks('./tasks');
 
 
-	// Register default tasks
-	grunt.registerTask('default', [
-		'compileAssets',
-		'linkAssets',
-		'watch'
-	]);
+  configureGruntfile();
 
+  /**
+   * Load CommonJS submodules from the specified
+   * relative path.
+   *
+   * @return {Object}
+   */
+  function loadTasks (relPath) {
+    return includeAll({
+      dirname: path.resolve(__dirname, relPath),
+      filter: /(.+)\.js$/
+    });
+  }
+
+  /**
+   * Invokes the config function for the task config and register definitions.
+   * Make sure to pass in grunt.
+   *
+   * @param  {Object} tasks [Grunt object that each task will need]
+   */
+  function invokeConfigFn (tasks) {
+    for (var taskName in tasks) {
+      if (obj.hasOwnProperty(taskName)) {
+        tasks[taskName](grunt);
+      }
+    }
+  }
+
+  /**
+   * Configure the gruntfile.
+   */
+  function configureGruntfile () {
+    var taskConfigurations = loadTasks('./gruntTasks/config'),
+        registerDefinitions = loadTasks('./gruntTasks/register');
+
+    invokeConfigFn(taskConfigurations);
+    invokeConfigFn(registerDefinitions);
+  }
 };
-
-
-
-
-
-/**
- * Load CommonJS submodules from the specified
- * relative path.
- *
- * @return {Object}
- */
-function loadTasks(relPath) {
-  return includeAll({
-    dirname: path.resolve(__dirname, relPath),
-    filter: /(.+)\.js$/
-  });
-}
