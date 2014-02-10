@@ -23,13 +23,8 @@ var includeAll = require('include-all')
 
 module.exports = function(grunt) {
 
-
-	var TASK_DIR = './tasks';
-
-	// Load Grunt tasks and store them in a big object.
-	var tasks = loadTasks(path.resolve(__dirname, TASK_DIR));
-
-	console.log(tasks);
+	// Load Grunt tasks from the `tasks` directory
+	loadTasks('./tasks');
 
 };
 
