@@ -13,9 +13,12 @@ var sailsgen = require('sails-generate')
 // during development.
 //
 
+// Make sure a "generated" dir exists for testing
+require('fs-extra').mkdirp(path.resolve(process.cwd(), 'generated'));
+
 var scope = {
 	generatorType: 'gruntfile',
-	rootPath: process.cwd(),
+	rootPath: path.resolve(process.cwd(), 'generated'),
 	modules: {
 		'gruntfile': path.resolve(__dirname, '../lib')
 	},
