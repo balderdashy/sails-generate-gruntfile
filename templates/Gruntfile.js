@@ -23,8 +23,16 @@ var includeAll = require('include-all')
 
 module.exports = function(grunt) {
 
-	// Load Grunt tasks from the `tasks` directory
-	loadTasks('./tasks');
+	// Load Grunt task deps from the `tasks` directory
+	var tasks = loadTasks('./tasks');
+
+
+	// Register default tasks
+	grunt.registerTask('default', [
+		'compileAssets',
+		'linkAssets',
+		'watch'
+	]);
 
 };
 
