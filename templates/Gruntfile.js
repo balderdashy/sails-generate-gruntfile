@@ -1,4 +1,4 @@
-var includeAll = require('include-all')
+var includeAll = require('sails/node_modules/include-all')
 	, path = require('path');
 
 /**
