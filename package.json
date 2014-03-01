@@ -1,6 +1,6 @@
 {
   "name": "sails-generate-gruntfile",
-  "version": "0.10.7",
+  "version": "0.10.8",
   "description": "Generate a gruntfile for Sails.",
   "main": "lib/index.js",
   "scripts": {
@@ -25,8 +25,8 @@
     "fs-extra": "~0.8.1"
   },
   "sailsGenerator": {
-      "type": "gruntfile",
-      "behavior": "overrides `sails generate gruntfile`",
-      "sailsVersion": "~0.10.0"
+    "type": "gruntfile",
+    "behavior": "overrides `sails generate gruntfile`",
+    "sailsVersion": "~0.10.0"
   }
 }
