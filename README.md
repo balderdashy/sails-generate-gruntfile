@@ -5,11 +5,6 @@
 
 A `gruntfile` generator for use with the Sails command-line interface.
 
-### Plugins
-
-> Also see [`sails-generate-gruntfile-gake`](https://github.com/mikermcneil/sails-generate-gruntfile-gake), another option with support for federated tasks
-> (required to take advantage of migration support)
-
 
 ### Installation
 
