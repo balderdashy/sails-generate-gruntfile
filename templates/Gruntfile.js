@@ -16,23 +16,21 @@ module.exports = function(grunt) {
 
 
 	/**
-	 * Load CommonJS submodules from the specified
-	 * relative path.
-	 *
-	 * @return {Object}
+	 * Loads Grunt configuration modules from the specified
+	 * relative path. These modules should export a function
+	 * that, when run, should either load/configure or register
+	 * a Grunt task.
 	 */
 	function loadTasks(relPath) {
 		return includeAll({
 			dirname: require('path').resolve(__dirname, relPath),
 			filter: /(.+)\.js$/
-		});
+		}) || {};
 	}
 
 	/**
-	 * Invokes the config function for the task config and register definitions.
-	 * Make sure to pass in grunt.
-	 *
-	 * @param  {Object} tasks [Grunt object that each task will need]
+	 * Invokes the function from a Grunt configuration module with
+	 * a single argument - the `grunt` object.
 	 */
 	function invokeConfigFn(tasks) {
 		for (var taskName in tasks) {
@@ -54,12 +52,23 @@ module.exports = function(grunt) {
 		console.error('To fix this, please run:');
 		console.error('npm install include-all --save`');
 		console.error();
+
+		grunt.registerTask('default', []);
 		return;
 	}
 
-	// Load tasks and configure Grunt.
+
+
+	// Load task functions
 	var taskConfigurations = loadTasks('./tasks/config'),
 		registerDefinitions = loadTasks('./tasks/register');
+
+	// (ensure that a default task exists)
+	if (!registerDefinitions.default) {
+		registerDefinitions.default = function (grunt) { grunt.registerTask('default', []); };
+	}
+
+	// Run task functions to configure Grunt.
 	invokeConfigFn(taskConfigurations);
 	invokeConfigFn(registerDefinitions);
 
