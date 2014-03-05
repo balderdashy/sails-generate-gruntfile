@@ -1,64 +1,66 @@
-var includeAll = require('sails/node_modules/include-all')
-	, path = require('path');
-
 /**
  * Gruntfile
  *
- * By default, the Gruntfile in new Sails projects comes with a `linker`
- * task, which will automatically inject client-side scripts, styles, and templates
- * from your `assets` folder into specific regions of certain EJS and HTML files
- * specified below.  This behavior is completely optional, but here for convenience.
+ * This Node script is executed when you run `grunt` or `sails lift`.
+ * It's purpose is to load the Grunt tasks in your project's `tasks`
+ * folder, and allow you to add and remove tasks as you see fit.
+ * For more information on how this works, check out the `README.md`
+ * file that was generated in your `tasks` folder.
  *
- * At the top part of this file, you'll find a few of the most commonly
- * configured options, but Sails' integration with Grunt is also fully
- * customizable.  If you'd like to work with your assets differently
- * you can change this file to do anything you like!
- *
- * More information on using Grunt to work with static assets:
- * http://gruntjs.com/configuring-tasks
+ * WARNING:
+ * Unless you know what you're doing, you shouldn't change this file.
+ * Check out the `tasks` directory instead.
  */
 
 module.exports = function(grunt) {
 
 
+	/**
+	 * Load CommonJS submodules from the specified
+	 * relative path.
+	 *
+	 * @return {Object}
+	 */
+	function loadTasks(relPath) {
+		return includeAll({
+			dirname: require('path').resolve(__dirname, relPath),
+			filter: /(.+)\.js$/
+		});
+	}
 
-  configureGruntfile();
+	/**
+	 * Invokes the config function for the task config and register definitions.
+	 * Make sure to pass in grunt.
+	 *
+	 * @param  {Object} tasks [Grunt object that each task will need]
+	 */
+	function invokeConfigFn(tasks) {
+		for (var taskName in tasks) {
+			if (tasks.hasOwnProperty(taskName)) {
+				tasks[taskName](grunt);
+			}
+		}
+	}
 
-  /**
-   * Load CommonJS submodules from the specified
-   * relative path.
-   *
-   * @return {Object}
-   */
-  function loadTasks (relPath) {
-    return includeAll({
-      dirname: path.resolve(__dirname, relPath),
-      filter: /(.+)\.js$/
-    });
-  }
 
-  /**
-   * Invokes the config function for the task config and register definitions.
-   * Make sure to pass in grunt.
-   *
-   * @param  {Object} tasks [Grunt object that each task will need]
-   */
-  function invokeConfigFn (tasks) {
-    for (var taskName in tasks) {
-      if (tasks.hasOwnProperty(taskName)) {
-        tasks[taskName](grunt);
-      }
-    }
-  }
+	// Load the include-all library in order to require all of our grunt
+	// configurations and task registrations dynamically.
+	var includeAll;
+	try {
+		includeAll = require('include-all');
+	} catch (e) {
+		console.error('Grunt:\nCould not find `include-all` module.');
+		console.error('Skipping grunt tasks...');
+		console.error('To fix this, please run:');
+		console.error('npm install include-all --save`');
+		console.error();
+		return;
+	}
 
-  /**
-   * Configure the gruntfile.
-   */
-  function configureGruntfile () {
-    var taskConfigurations = loadTasks('./tasks/config'),
-        registerDefinitions = loadTasks('./tasks/register');
+	// Load tasks and configure Grunt.
+	var taskConfigurations = loadTasks('./tasks/config'),
+		registerDefinitions = loadTasks('./tasks/register');
+	invokeConfigFn(taskConfigurations);
+	invokeConfigFn(registerDefinitions);
 
-    invokeConfigFn(taskConfigurations);
-    invokeConfigFn(registerDefinitions);
-  }
 };
