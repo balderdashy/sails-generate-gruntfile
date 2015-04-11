@@ -4,6 +4,10 @@
  * This Node script is executed when you run `grunt` or `sails lift`.
  * It's purpose is to load the Grunt tasks in your project's `tasks`
  * folder, and allow you to add and remove tasks as you see fit.
+ * 
+ * If NODE_ENV is set and a corresponding task list exists (eg. NODE_ENV = QA and QA.js exists), 
+ * that task list will be loaded.
+ * 
  * For more information on how this works, check out the `README.md`
  * file that was generated in your `tasks` folder.
  *
