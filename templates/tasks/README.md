@@ -38,6 +38,11 @@ Runs the `buildProd` task (`tasks/register/buildProd.js`).
 
 You can modify, omit, or replace any of these Grunt tasks to fit your requirements. You can also add your own Grunt tasks- just add a `someTask.js` file in the `grunt/config` directory to configure the new task, then register it with the appropriate parent task(s) (see files in `grunt/register/*.js`).
 
+There are two methods that Sails will use to register your Grunt tasks and configuration, either one may be used or mixed to create the build pipeline your application requires:
+
+ 1. The **manual method** is best for highly custom tasks or configuration: it requires each module to export a function which takes a single argument. When Sails encounters this task it will be invoked immediately with the Grunt object.
+ 2. The **dynamic method** only requires an object containing the configuration or an array with the tasks. When Sails encounters this task it will be registered using `grunt.config.set` or `grunt.registerTask` using the filename as the task and the exported object as the parameters.
+
 
 ### Do I have to use Grunt?
 
@@ -51,4 +56,3 @@ That's ok! A core tenant of Sails is client-agnosticism-- it's especially design
 You can completely disable Grunt by following the instructions above.
 
 If you still want to use Grunt for other purposes, but don't want any of the default web front-end stuff, just delete your project's `assets` folder and remove the front-end oriented tasks from the `grunt/register` and `grunt/config` folders.  You can also run `sails new myCoolApi --no-frontend` to omit the `assets` folder and front-end-oriented Grunt tasks for future projects.  You can also replace your `sails-generate-frontend` module with alternative community generators, or create your own.  This allows `sails new` to create the boilerplate for native iOS apps, Android apps, Cordova apps, SteroidsJS apps, etc.
-

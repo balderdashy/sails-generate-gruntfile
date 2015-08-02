@@ -25,11 +25,11 @@ module.exports = function(grunt) {
 			includeAll = require('sails/node_modules/include-all');
 		}
 		catch(e1) {
-			console.error('Could not find `include-all` module.');
-			console.error('Skipping grunt tasks...');
-			console.error('To fix this, please run:');
-			console.error('npm install include-all --save`');
-			console.error();
+			grunt.log.error('Could not find `include-all` module.');
+			grunt.log.error('Skipping grunt tasks...');
+			grunt.log.error('To fix this, please run:');
+			grunt.log.error('`npm install include-all --save`');
+			grunt.log.error();
 
 			grunt.registerTask('default', []);
 			return;
@@ -51,13 +51,25 @@ module.exports = function(grunt) {
 	}
 
 	/**
-	 * Invokes the function from a Grunt configuration module with
-	 * a single argument - the `grunt` object.
+	 * Loads the function from a Grunt configuration module. If the module is a
+	 * function, it will be invoked with a single argument - the `grunt` object.
+	 * Otherwise, the value returned by the module will be used to call
+	 * `grunt.config.set` or `grunt.registerTask` with the module name.
 	 */
-	function invokeConfigFn(tasks) {
-		for (var taskName in tasks) {
-			if (tasks.hasOwnProperty(taskName)) {
-				tasks[taskName](grunt);
+	function invokeConfig(mode) {
+		var tasks = loadTasks('./tasks/' + mode);
+		for (var task in tasks) {
+			if (tasks.hasOwnProperty(task)) {
+				if (typeof tasks[task] === 'function') {
+					tasks[task](grunt);
+					continue;
+				}
+
+				if (mode === 'config') {
+					grunt.config.set(task, tasks[task]);
+				} else if (mode === 'register') {
+					grunt.registerTask(task, tasks[task]);
+				}
 			}
 		}
 	}
@@ -65,17 +77,24 @@ module.exports = function(grunt) {
 
 
 
-	// Load task functions
-	var taskConfigurations = loadTasks('./tasks/config'),
-		registerDefinitions = loadTasks('./tasks/register');
+	// Run task functions to configure Grunt.
+	invokeConfig('config');
+	invokeConfig('register');
 
 	// (ensure that a default task exists)
-	if (!registerDefinitions.default) {
-		registerDefinitions.default = function (grunt) { grunt.registerTask('default', []); };
+	if (!grunt.task.exists('default')) {
+		grunt.registerTask('default', []);
 	}
 
-	// Run task functions to configure Grunt.
-	invokeConfigFn(taskConfigurations);
-	invokeConfigFn(registerDefinitions);
+	// Dynamically load all registered Grunt tasks.
+	try {
+		require('load-grunt-tasks')(grunt);
+	} catch (e) {
+		grunt.log.error('Could not find `load-grunt-tasks` module.');
+		grunt.log.error('Dynamically registered modules require this module...');
+		grunt.log.error('To fix this, please run:');
+		grunt.log.error('`npm install load-grunt-tasks --save`');
+		return;
+	}
 
 };
