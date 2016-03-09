@@ -46,7 +46,7 @@ module.exports = function(grunt) {
     return includeAll({
       dirname: require('path').resolve(__dirname, relPath),
       filter: /(.+)\.js$/,
-      excludeDirs :  /^\.(git|svn)$/
+      excludeDirs: /^\.(git|svn)$/
     }) || {};
   }
 
